@@ -1,0 +1,127 @@
+version: '3.9'
+
+services:
+    app01:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app01:9000
+            NODE_IDENTIFIER: node1
+            ALL_NODE_ADDRESSES: node1@app01:9000,node2@app02:9000,node3@app03:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app01_data:/app/data
+
+    app02:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app02:9000
+            NODE_IDENTIFIER: node2
+            ALL_NODE_ADDRESSES: node1@app01:9000,node2@app02:9000,node3@app03:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app02_data:/app/data
+
+    app03:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app03:9000
+            NODE_IDENTIFIER: node3
+            ALL_NODE_ADDRESSES: node1@app01:9000,node2@app02:9000,node3@app03:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app03_data:/app/data
+
+    app11:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app11:9000
+            NODE_IDENTIFIER: node1
+            ALL_NODE_ADDRESSES: node1@app11:9000,node2@app12:9000,node3@app13:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app11_data:/app/data
+
+    app12:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app12:9000
+            NODE_IDENTIFIER: node2
+            ALL_NODE_ADDRESSES: node1@app11:9000,node2@app12:9000,node3@app13:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app12_data:/app/data
+
+    app13:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            RAFT_STORE_PATH: /app/data
+            NODE_ADDRESS: app13:9000
+            NODE_IDENTIFIER: node3
+            ALL_NODE_ADDRESSES: node1@app11:9000,node2@app12:9000,node3@app13:9000
+            SERVER_ADDR: :4000
+        expose:
+            - '4000'
+            - '9000'
+        volumes:
+            - app13_data:/app/data
+
+    haproxy:
+        image: haproxy
+        volumes:
+            - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+            - ./sharding.lua:/usr/local/etc/haproxy/sharding.lua:ro
+        ports:
+            - '8081:80'
+        depends_on:
+            - app01
+            - app02
+            - app03
+            - app11
+            - app12
+            - app13
+
+volumes:
+    app01_data:
+    app02_data:
+    app03_data:
+    app11_data:
+    app12_data:
+    app13_data:

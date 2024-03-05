@@ -1,0 +1,6 @@
+README.md
+.dockerignore
+haproxy.cfg
+Dockerfile
+docker-compose.yml
+test/
