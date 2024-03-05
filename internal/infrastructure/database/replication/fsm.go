@@ -21,7 +21,7 @@ type KeyValueFSM struct {
 	storeUsecase application.KeyValueStoreUsecaseInterface
 }
 
-// KeyValueCommand is responsible for enforcing the format for LogEntries from same/different server node
+// KeyValueCommand is responsible for enforcing the format for LogEntries
 type KeyValueCommand struct {
 	Operation string `json:"operation"`
 	Key       string `json:"key"`
@@ -65,7 +65,7 @@ func (fsm *KeyValueFSM) Restore(snapshot io.ReadCloser) error {
 	return nil
 }
 
-// Snapshot is responsible for creating a snapshot of current KeyValueStore of the Machine
+// Snapshot is responsible for creating a snapshot of current state of KeyValueStore of the Machine
 func (fsm *KeyValueFSM) Snapshot() (raft.FSMSnapshot, error) {
 
 	// Implementing a Read Lock

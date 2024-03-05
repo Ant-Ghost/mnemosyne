@@ -6,8 +6,7 @@ type KeyValueStore struct {
 	keyValue map[string]string
 }
 
-//NewStore is responsible for creating a brand new KeyValueStore instance
-
+// NewStore is responsible for creating a brand new KeyValueStore instance
 func NewStore() KeyValueStoreInterface {
 	return &KeyValueStore{keyValue: make(map[string]string)}
 }
